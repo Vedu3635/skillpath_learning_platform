@@ -74,6 +74,7 @@ export default function CourseGrid({
     const [loading, setLoading] = React.useState(true)
     const [error, setError] = React.useState(false)
     const [countryFailed, setCountryFailed] = React.useState(false)
+    void countryFailed
 
     React.useEffect(() => {
         async function loadData() {
@@ -103,6 +104,190 @@ export default function CourseGrid({
         loadData()
     }, [])
 
+    // Step 3A — Loading state
+    if (loading) {
+        return (
+            <div
+                style={{
+                    width: "100%",
+                    minHeight: "300px",
+                    display: "flex",
+                    alignItems: "center",
+                    justifyContent: "center",
+                    padding: "24px",
+                    boxSizing: "border-box",
+                    fontFamily:
+                        '-apple-system, BlinkMacSystemFont, "Segoe UI", sans-serif',
+                }}
+            >
+                <div
+                    style={{
+                        textAlign: "center",
+                        color: "#6B7280",
+                    }}
+                >
+                    <div
+                        style={{
+                            width: "32px",
+                            height: "32px",
+                            border: "3px solid #E5E7EB",
+                            borderTopColor: accentColor,
+                            borderRadius: "50%",
+                            margin: "0 auto 12px",
+                            animation: "spin 1s linear infinite",
+                        }}
+                    />
+
+                    <div
+                        style={{
+                            fontSize: "14px",
+                        }}
+                    >
+                        Loading courses...
+                    </div>
+                </div>
+
+                <style>
+                    {`
+                        @keyframes spin {
+                            from {
+                                transform: rotate(0deg);
+                            }
+                            to {
+                                transform: rotate(360deg);
+                            }
+                        }
+                    `}
+                </style>
+            </div>
+        )
+    }
+
+    // Step 3B — Error state
+    if (error) {
+        return (
+            <div
+                style={{
+                    width: "100%",
+                    minHeight: "300px",
+                    display: "flex",
+                    alignItems: "center",
+                    justifyContent: "center",
+                    padding: "24px",
+                    boxSizing: "border-box",
+                    fontFamily:
+                        '-apple-system, BlinkMacSystemFont, "Segoe UI", sans-serif',
+                }}
+            >
+                <div
+                    style={{
+                        maxWidth: "420px",
+                        textAlign: "center",
+                    }}
+                >
+                    <div
+                        style={{
+                            width: "48px",
+                            height: "48px",
+                            margin: "0 auto 16px",
+                            borderRadius: "50%",
+                            background: "#FEE2E2",
+                            color: "#EF4444",
+                            display: "flex",
+                            alignItems: "center",
+                            justifyContent: "center",
+                            fontSize: "22px",
+                            fontWeight: "bold",
+                        }}
+                    >
+                        !
+                    </div>
+
+                    <h3
+                        style={{
+                            margin: "0 0 8px",
+                            fontSize: "18px",
+                            fontWeight: 600,
+                            color: "#111827",
+                        }}
+                    >
+                        Unable to load courses
+                    </h3>
+
+                    <p
+                        style={{
+                            margin: 0,
+                            fontSize: "14px",
+                            lineHeight: 1.5,
+                            color: "#6B7280",
+                        }}
+                    >
+                        We couldn't load the course information right now.
+                        Please try again later.
+                    </p>
+                </div>
+            </div>
+        )
+    }
+
+    // Step 3C — Empty state
+    if (courses.length === 0) {
+        return (
+            <div
+                style={{
+                    width: "100%",
+                    minHeight: "300px",
+                    display: "flex",
+                    alignItems: "center",
+                    justifyContent: "center",
+                    padding: "24px",
+                    boxSizing: "border-box",
+                    fontFamily:
+                        '-apple-system, BlinkMacSystemFont, "Segoe UI", sans-serif',
+                }}
+            >
+                <div
+                    style={{
+                        textAlign: "center",
+                        maxWidth: "400px",
+                    }}
+                >
+                    <div
+                        style={{
+                            fontSize: "40px",
+                            marginBottom: "12px",
+                        }}
+                    >
+                        📚
+                    </div>
+
+                    <h3
+                        style={{
+                            margin: "0 0 8px",
+                            fontSize: "18px",
+                            fontWeight: 600,
+                            color: "#111827",
+                        }}
+                    >
+                        No courses available
+                    </h3>
+
+                    <p
+                        style={{
+                            margin: 0,
+                            fontSize: "14px",
+                            lineHeight: 1.5,
+                            color: "#6B7280",
+                        }}
+                    >
+                        There are currently no courses to display.
+                    </p>
+                </div>
+            </div>
+        )
+    }
+
+    // Step 3D — Success state
     return (
         <div
             style={{
@@ -114,18 +299,6 @@ export default function CourseGrid({
                     'system-ui, -apple-system, BlinkMacSystemFont, "Segoe UI", Roboto, sans-serif',
             }}
         >
-            {/* Status indicators for Step 2 debugging */}
-            <div style={{ marginBottom: "16px", fontSize: "13px", color: "#64748B" }}>
-                {loading && <span>⏳ Fetching course & country data...</span>}
-                {error && <span style={{ color: "#EF4444" }}>❌ Course API Error!</span>}
-                {!loading && !error && (
-                    <span>
-                        ✅ Loaded {courses.length} courses | Country: <strong>{country}</strong>
-                        {countryFailed && <span style={{ color: "#F59E0B" }}> (Fallback applied: Country API failed)</span>}
-                    </span>
-                )}
-            </div>
-
             <div
                 style={{
                     display: "grid",
