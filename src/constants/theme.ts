@@ -1,9 +1,9 @@
-export const INK = "#12141C"
-export const MUTED = "#5B6272"
-export const FAINT = "#9297A6"
-export const PAPER = "#FFFFFF"
-export const LINE = "#E4E6EC"
-export const DASH = "#D3D6DE"
+export const INK = "var(--sp-ink, #12141C)"
+export const MUTED = "var(--sp-muted, #5B6272)"
+export const FAINT = "var(--sp-faint, #9297A6)"
+export const PAPER = "var(--sp-card-bg, #FFFFFF)"
+export const LINE = "var(--sp-card-border, #E4E6EC)"
+export const DASH = "var(--sp-dash, #D3D6DE)"
 
 export const DISPLAY_FONT =
     "'Plus Jakarta Sans', system-ui, -apple-system, BlinkMacSystemFont, sans-serif"
@@ -32,6 +32,18 @@ export const THEME_STYLES = `
     --sp-border: #E4E6EC;
     --sp-ink: #12141C;
     --sp-muted: #5B6272;
+    --sp-faint: #9297A6;
+    --sp-dash: #D3D6DE;
+    --sp-card-bg: #FFFFFF;
+    --sp-card-border: #E4E6EC;
+    --sp-chip-bg: #F4F5F7;
+    --sp-chip-text: #3F4453;
+    --sp-toggle-bg: #F3F4F6;
+    --sp-toggle-active-bg: #FFFFFF;
+    --sp-skeleton-1: #EEF0F3;
+    --sp-skeleton-2: #F7F8FA;
+    --sp-estimated-bg: #FFF6E5;
+    --sp-estimated-text: #9A6700;
     --sp-track-off: #D6D9E0;
     --sp-ring: #FFFFFF;
   }
@@ -43,6 +55,18 @@ export const THEME_STYLES = `
     --sp-border: #262B3A;
     --sp-ink: #F2F3F6;
     --sp-muted: #8B90A0;
+    --sp-faint: #737B92;
+    --sp-dash: #2E3547;
+    --sp-card-bg: #121520;
+    --sp-card-border: #262B3A;
+    --sp-chip-bg: #1C2130;
+    --sp-chip-text: #C4C9D8;
+    --sp-toggle-bg: #181D2A;
+    --sp-toggle-active-bg: #282E42;
+    --sp-skeleton-1: #181D2B;
+    --sp-skeleton-2: #242B3E;
+    --sp-estimated-bg: #35260A;
+    --sp-estimated-text: #FBBF24;
     --sp-track-off: #334155;
     --sp-ring: #0A0C12;
   }
