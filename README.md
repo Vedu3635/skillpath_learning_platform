@@ -127,3 +127,7 @@ interface CountryResponse {
 ## 📄 License
 
 MIT © [Skillpath Course Grid](https://github.com/Vedu3635/skillpath-course-grid)
+
+
+## AI Notes
+I used chat gpt for help(here is the reference link): https://chatgpt.com/share/6a8552eb-5854-83ee-bb13-2ceda5e47a7b
