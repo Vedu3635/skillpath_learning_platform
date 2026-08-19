@@ -1,10 +1,34 @@
-import { useState } from 'react'
+import { useState, useEffect } from 'react'
 import CourseGrid from '../assets/CourseGrid'
 
 export default function App() {
-  const [accentColor, setAccentColor] = useState('#2563EB')
-  const [showCategory, setShowCategory] = useState(true)
-  const [isDarkMode, setIsDarkMode] = useState(false)
+  const [accentColor, setAccentColor] = useState(() => {
+    return localStorage.getItem('skillpath_accent') || '#2563EB'
+  })
+  const [showCategory, setShowCategory] = useState(() => {
+    const saved = localStorage.getItem('skillpath_show_category')
+    return saved !== null ? saved === 'true' : true
+  })
+  const [isDarkMode, setIsDarkMode] = useState(() => {
+    return localStorage.getItem('skillpath_theme') === 'dark'
+  })
+
+  // Persist accentColor
+  useEffect(() => {
+    localStorage.setItem('skillpath_accent', accentColor)
+  }, [accentColor])
+
+  // Persist showCategory
+  useEffect(() => {
+    localStorage.setItem('skillpath_show_category', String(showCategory))
+  }, [showCategory])
+
+  // Persist theme & synchronize body background
+  useEffect(() => {
+    localStorage.setItem('skillpath_theme', isDarkMode ? 'dark' : 'light')
+    document.body.style.backgroundColor = isDarkMode ? '#0f172a' : '#f8fafc'
+    document.body.style.color = isDarkMode ? '#f8fafc' : '#0f172a'
+  }, [isDarkMode])
 
   return (
     <div style={{
