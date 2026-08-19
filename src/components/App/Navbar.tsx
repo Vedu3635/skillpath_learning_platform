@@ -39,54 +39,56 @@ export function Navbar({
                     <span style={{ fontWeight: 800, fontSize: '16px', letterSpacing: '-0.01em' }}>Skillpath</span>
                 </a>
 
-                {/* Merged Controls: Accent swatches, custom picker, Category switch & Theme toggle */}
+                {/* Controls: Accent swatches (Dev mode only), Category switch & Theme toggle */}
                 <div style={{ display: 'flex', alignItems: 'center', gap: '20px', flexWrap: 'wrap' }}>
-                    {/* Accent Color */}
-                    <div style={{ display: 'flex', alignItems: 'center', gap: '10px' }}>
-                        <span style={{ fontWeight: 700, fontSize: '11px', color: 'var(--sp-muted)', textTransform: 'uppercase', letterSpacing: '0.06em' }}>
-                            Accent
-                        </span>
-                        <div style={{ display: 'flex', alignItems: 'center', gap: '7px' }}>
-                            {COLOR_PRESETS.map((preset) => {
-                                const active = accentColor.toLowerCase() === preset.color.toLowerCase()
-                                return (
-                                    <button
-                                        key={preset.color}
-                                        onClick={() => onSetAccentColor(preset.color)}
-                                        aria-label={preset.label}
-                                        aria-pressed={active}
-                                        title={preset.label}
-                                        className="sp-focusable"
-                                        style={{
-                                            width: '24px',
-                                            height: '24px',
-                                            borderRadius: '50%',
-                                            backgroundColor: preset.color,
-                                            border: active ? '2px solid var(--sp-ring)' : '2px solid transparent',
-                                            boxShadow: active ? `0 0 0 2px ${preset.color}` : 'none',
-                                            cursor: 'pointer',
-                                            padding: 0,
-                                            transition: 'transform 0.15s ease',
-                                        }}
-                                    />
-                                )
-                            })}
-                            <span style={{ width: '1px', height: '18px', backgroundColor: 'var(--sp-border)', margin: '0 2px' }} />
-                            <label style={{ display: 'inline-flex', alignItems: 'center', gap: '6px', cursor: 'pointer' }}>
-                                <input
-                                    type="color"
-                                    value={accentColor}
-                                    onChange={(e) => onSetAccentColor(e.target.value)}
-                                    style={{ width: '24px', height: '24px', border: 'none', borderRadius: '6px', cursor: 'pointer', background: 'transparent', padding: 0 }}
-                                />
-                                <span style={{ fontFamily: MONO_FONT, fontSize: '11px', color: 'var(--sp-muted)', fontWeight: 600 }}>
-                                    {accentColor.toUpperCase()}
+                    {import.meta.env.DEV && (
+                        <>
+                            <div style={{ display: 'flex', alignItems: 'center', gap: '10px' }}>
+                                <span style={{ fontWeight: 700, fontSize: '11px', color: 'var(--sp-muted)', textTransform: 'uppercase', letterSpacing: '0.06em' }}>
+                                    Accent
                                 </span>
-                            </label>
-                        </div>
-                    </div>
-
-                    <span style={{ width: '1px', height: '18px', backgroundColor: 'var(--sp-border)' }} />
+                                <div style={{ display: 'flex', alignItems: 'center', gap: '7px' }}>
+                                    {COLOR_PRESETS.map((preset) => {
+                                        const active = accentColor.toLowerCase() === preset.color.toLowerCase()
+                                        return (
+                                            <button
+                                                key={preset.color}
+                                                onClick={() => onSetAccentColor(preset.color)}
+                                                aria-label={preset.label}
+                                                aria-pressed={active}
+                                                title={preset.label}
+                                                className="sp-focusable"
+                                                style={{
+                                                    width: '24px',
+                                                    height: '24px',
+                                                    borderRadius: '50%',
+                                                    backgroundColor: preset.color,
+                                                    border: active ? '2px solid var(--sp-ring)' : '2px solid transparent',
+                                                    boxShadow: active ? `0 0 0 2px ${preset.color}` : 'none',
+                                                    cursor: 'pointer',
+                                                    padding: 0,
+                                                    transition: 'transform 0.15s ease',
+                                                }}
+                                            />
+                                        )
+                                    })}
+                                    <span style={{ width: '1px', height: '18px', backgroundColor: 'var(--sp-border)', margin: '0 2px' }} />
+                                    <label style={{ display: 'inline-flex', alignItems: 'center', gap: '6px', cursor: 'pointer' }}>
+                                        <input
+                                            type="color"
+                                            value={accentColor}
+                                            onChange={(e) => onSetAccentColor(e.target.value)}
+                                            style={{ width: '24px', height: '24px', border: 'none', borderRadius: '6px', cursor: 'pointer', background: 'transparent', padding: 0 }}
+                                        />
+                                        <span style={{ fontFamily: MONO_FONT, fontSize: '11px', color: 'var(--sp-muted)', fontWeight: 600 }}>
+                                            {accentColor.toUpperCase()}
+                                        </span>
+                                    </label>
+                                </div>
+                            </div>
+                            <span style={{ width: '1px', height: '18px', backgroundColor: 'var(--sp-border)' }} />
+                        </>
+                    )}
 
                     {/* Category Switch */}
                     <div style={{ display: 'flex', alignItems: 'center', gap: '9px' }}>
