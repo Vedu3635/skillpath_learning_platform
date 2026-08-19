@@ -59,6 +59,17 @@ async function fetchCountry(): Promise<CountryResponse> {
     return data
 }
 
+function formatPrice(
+    course: Course,
+    country: "IN" | "US" | null
+): string {
+    if (country === "IN") {
+        return `₹${(course.pricePaise / 100).toFixed(2)}`
+    }
+
+    return `$${(course.priceUsdCents / 100).toFixed(2)}`
+}
+
 interface CourseGridProps {
     accentColor: string
     showCategory: boolean
@@ -74,7 +85,6 @@ export default function CourseGrid({
     const [loading, setLoading] = React.useState(true)
     const [error, setError] = React.useState(false)
     const [countryFailed, setCountryFailed] = React.useState(false)
-    void countryFailed
 
     React.useEffect(() => {
         async function loadData() {
@@ -287,90 +297,169 @@ export default function CourseGrid({
         )
     }
 
-    // Step 3D — Success state
+    // Step 4B & 4C — Production-ready Card Grid & Responsive Layout
     return (
         <div
             style={{
                 width: "100%",
-                minHeight: "300px",
                 padding: "24px",
                 boxSizing: "border-box",
                 fontFamily:
-                    'system-ui, -apple-system, BlinkMacSystemFont, "Segoe UI", Roboto, sans-serif',
+                    '-apple-system, BlinkMacSystemFont, "Segoe UI", sans-serif',
             }}
         >
-            <div
-                style={{
-                    display: "grid",
-                    gridTemplateColumns: "repeat(auto-fit, minmax(240px, 1fr))",
-                    gap: "20px",
-                }}
-            >
+            <div className="course-grid">
                 {courses.map((course) => (
                     <div
                         key={course.mangoId}
                         style={{
+                            display: "flex",
+                            flexDirection: "column",
                             border: "1px solid #E5E7EB",
                             borderRadius: "16px",
                             padding: "20px",
                             background: "#FFFFFF",
-                            boxShadow: "0 4px 12px rgba(0, 0, 0, 0.03)",
+                            boxSizing: "border-box",
+                            minWidth: 0,
                         }}
                     >
+                        {/* Course type */}
+                        <div
+                            style={{
+                                fontSize: "12px",
+                                fontWeight: 600,
+                                color: accentColor,
+                                marginBottom: "8px",
+                                textTransform: "uppercase",
+                                letterSpacing: "0.04em",
+                            }}
+                        >
+                            {course.courseType}
+                        </div>
+
+                        {/* Course name */}
                         <h3
                             style={{
                                 margin: "0 0 10px",
-                                fontSize: "18px",
-                                fontWeight: 600,
-                                color: "#0F172A",
+                                fontSize: "19px",
+                                lineHeight: 1.3,
+                                fontWeight: 650,
+                                color: "#111827",
                             }}
                         >
                             {course.courseName}
                         </h3>
 
+                        {/* Description */}
                         <p
                             style={{
-                                margin: "0 0 12px",
-                                color: "#6B7280",
+                                margin: "0 0 14px",
                                 fontSize: "14px",
                                 lineHeight: 1.5,
+                                color: "#6B7280",
+                                display: "-webkit-box",
+                                WebkitLineClamp: 2,
+                                WebkitBoxOrient: "vertical",
+                                overflow: "hidden",
                             }}
                         >
                             {course.description}
                         </p>
 
+                        {/* Category */}
                         {showCategory && (
                             <div
                                 style={{
-                                    display: "inline-block",
+                                    display: "inline-flex",
+                                    alignSelf: "flex-start",
+                                    padding: "5px 9px",
+                                    marginBottom: "16px",
+                                    borderRadius: "999px",
+                                    background: "#F3F4F6",
+                                    color: "#4B5563",
                                     fontSize: "12px",
-                                    fontWeight: 600,
-                                    textTransform: "uppercase",
-                                    padding: "4px 10px",
-                                    borderRadius: "20px",
-                                    backgroundColor: accentColor + "15",
-                                    color: accentColor,
-                                    marginBottom: "14px",
+                                    fontWeight: 500,
                                 }}
                             >
                                 {course.mainCategory}
                             </div>
                         )}
 
+                        {/* Bottom section */}
                         <div
                             style={{
-                                fontSize: "20px",
-                                fontWeight: 700,
-                                color: accentColor,
+                                marginTop: "auto",
+                                display: "flex",
+                                alignItems: "center",
+                                justifyContent: "space-between",
+                                gap: "12px",
                             }}
                         >
-                            {country === "IN"
-                                ? `₹${(course.pricePaise / 100).toFixed(2)}`
-                                : `$${(course.priceUsdCents / 100).toFixed(2)}`}
+                            <div>
+                                <div
+                                    style={{
+                                        fontSize: "20px",
+                                        fontWeight: 700,
+                                        color: accentColor,
+                                    }}
+                                >
+                                    {formatPrice(course, country)}
+                                </div>
+
+                                {countryFailed && (
+                                    <div
+                                        style={{
+                                            marginTop: "3px",
+                                            fontSize: "11px",
+                                            color: "#9CA3AF",
+                                        }}
+                                    >
+                                        Estimated pricing
+                                    </div>
+                                )}
+                            </div>
+
+                            <button
+                                type="button"
+                                style={{
+                                    border: "none",
+                                    borderRadius: "10px",
+                                    padding: "10px 14px",
+                                    background: accentColor,
+                                    color: "#FFFFFF",
+                                    fontSize: "13px",
+                                    fontWeight: 600,
+                                    cursor: "pointer",
+                                }}
+                            >
+                                View Course
+                            </button>
                         </div>
                     </div>
                 ))}
             </div>
+
+            <style>
+                {`
+                    .course-grid {
+                        display: grid;
+                        grid-template-columns: repeat(3, minmax(0, 1fr));
+                        gap: 20px;
+                    }
+
+                    @media (max-width: 900px) {
+                        .course-grid {
+                            grid-template-columns: repeat(2, minmax(0, 1fr));
+                        }
+                    }
+
+                    @media (max-width: 600px) {
+                        .course-grid {
+                            grid-template-columns: minmax(0, 1fr);
+                        }
+                    }
+                `}
+            </style>
         </div>
     )
 }
