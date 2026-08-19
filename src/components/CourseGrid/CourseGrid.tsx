@@ -100,7 +100,7 @@ export function CourseGrid({
             to { transform: rotate(360deg); }
         }
         .cg-skeleton {
-            background: linear-gradient(90deg, #EEF0F3 25%, #F7F8FA 37%, #EEF0F3 63%);
+            background: linear-gradient(90deg, var(--sp-skeleton-1, #EEF0F3) 25%, var(--sp-skeleton-2, #F7F8FA) 37%, var(--sp-skeleton-1, #EEF0F3) 63%);
             background-size: 800px 100%;
             animation: cg-shimmer 1.4s ease-in-out infinite;
             border-radius: 6px;
@@ -204,10 +204,10 @@ export function CourseGrid({
                             display: "flex",
                             alignItems: "center",
                             padding: "4px",
-                            background: "#F3F4F6",
+                            background: "var(--sp-toggle-bg, #F3F4F6)",
                             borderRadius: "10px",
                             gap: "2px",
-                            border: "1px solid #E4E6EC",
+                            border: "1px solid var(--sp-border, #E4E6EC)",
                         }}
                     >
                         <button
@@ -222,7 +222,7 @@ export function CourseGrid({
                                 padding: "6px 12px",
                                 background:
                                     selectedCountry === "IN"
-                                        ? "#FFFFFF"
+                                        ? "var(--sp-toggle-active-bg, #FFFFFF)"
                                         : "transparent",
                                 color:
                                     selectedCountry === "IN"
@@ -237,7 +237,7 @@ export function CourseGrid({
                                 cursor: "pointer",
                                 boxShadow:
                                     selectedCountry === "IN"
-                                        ? "0 1px 3px rgba(0,0,0,0.08)"
+                                        ? "0 1px 3px rgba(0,0,0,0.12)"
                                         : "none",
                                 transition: "all 0.15s ease",
                             }}
@@ -257,7 +257,7 @@ export function CourseGrid({
                                 padding: "6px 12px",
                                 background:
                                     selectedCountry === "US"
-                                        ? "#FFFFFF"
+                                        ? "var(--sp-toggle-active-bg, #FFFFFF)"
                                         : "transparent",
                                 color:
                                     selectedCountry === "US"
@@ -272,7 +272,7 @@ export function CourseGrid({
                                 cursor: "pointer",
                                 boxShadow:
                                     selectedCountry === "US"
-                                        ? "0 1px 3px rgba(0,0,0,0.08)"
+                                        ? "0 1px 3px rgba(0,0,0,0.12)"
                                         : "none",
                                 transition: "all 0.15s ease",
                             }}
