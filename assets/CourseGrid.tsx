@@ -27,8 +27,12 @@ const COURSE_API =
 const COUNTRY_API =
     "https://syncsphere-hiv6.onrender.com/assignment/country-code"
 
-async function fetchCourses(): Promise<Course[]> {
-    const response = await fetch(COURSE_API)
+async function fetchCourses(
+    signal?: AbortSignal
+): Promise<Course[]> {
+    const response = await fetch(COURSE_API, {
+        signal,
+    })
 
     if (!response.ok) {
         throw new Error(`Course API failed: ${response.status}`)
@@ -43,8 +47,12 @@ async function fetchCourses(): Promise<Course[]> {
     return data
 }
 
-async function fetchCountry(): Promise<CountryResponse> {
-    const response = await fetch(COUNTRY_API)
+async function fetchCountry(
+    signal?: AbortSignal
+): Promise<CountryResponse> {
+    const response = await fetch(COUNTRY_API, {
+        signal,
+    })
 
     if (!response.ok) {
         throw new Error(`Country API failed: ${response.status}`)
@@ -86,33 +94,52 @@ export default function CourseGrid({
     const [error, setError] = React.useState(false)
     const [countryFailed, setCountryFailed] = React.useState(false)
 
-    React.useEffect(() => {
-        async function loadData() {
-            setLoading(true)
-            setError(false)
-            setCountryFailed(false)
+    const loadData = React.useCallback(async (signal?: AbortSignal) => {
+        setLoading(true)
+        setError(false)
+        setCountryFailed(false)
+        setCountry(null)
+        setCourses([])
+
+        try {
+            const courseData = await fetchCourses(signal)
+
+            if (signal?.aborted) return
+
+            setCourses(courseData)
 
             try {
-                const courseData = await fetchCourses()
+                const countryData = await fetchCountry(signal)
 
-                setCourses(courseData)
+                if (signal?.aborted) return
 
-                try {
-                    const countryData = await fetchCountry()
-                    setCountry(countryData.country_code)
-                } catch {
-                    setCountry("US")
-                    setCountryFailed(true)
-                }
-            } catch {
-                setError(true)
-            } finally {
+                setCountry(countryData.country_code)
+            } catch (err) {
+                if (signal?.aborted) return
+
+                setCountry("US")
+                setCountryFailed(true)
+            }
+        } catch (err) {
+            if (signal?.aborted) return
+
+            setError(true)
+        } finally {
+            if (!signal?.aborted) {
                 setLoading(false)
             }
         }
-
-        loadData()
     }, [])
+
+    React.useEffect(() => {
+        const controller = new AbortController()
+
+        loadData(controller.signal)
+
+        return () => {
+            controller.abort()
+        }
+    }, [loadData])
 
     // Step 3A — Loading state
     if (loading) {
@@ -173,7 +200,7 @@ export default function CourseGrid({
         )
     }
 
-    // Step 3B — Error state
+    // Step 3B & 5B — Error state with Retry button
     if (error) {
         return (
             <div
@@ -235,6 +262,24 @@ export default function CourseGrid({
                         We couldn't load the course information right now.
                         Please try again later.
                     </p>
+
+                    <button
+                        type="button"
+                        onClick={() => loadData()}
+                        style={{
+                            marginTop: "18px",
+                            border: "none",
+                            borderRadius: "10px",
+                            padding: "10px 16px",
+                            background: accentColor,
+                            color: "#FFFFFF",
+                            fontSize: "13px",
+                            fontWeight: 600,
+                            cursor: "pointer",
+                        }}
+                    >
+                        Try Again
+                    </button>
                 </div>
             </div>
         )
