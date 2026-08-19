@@ -28,3 +28,33 @@ export function BrandMark({ accentColor }: { accentColor: string }) {
         </svg>
     )
 }
+
+export function IndiaFlag() {
+    return (
+        <svg width="20" height="14" viewBox="0 0 20 14" fill="none" style={{ borderRadius: '2px', overflow: 'hidden', display: 'inline-block', verticalAlign: 'middle', border: '1px solid rgba(0,0,0,0.1)' }}>
+            <rect width="20" height="4.67" fill="#FF9933" />
+            <rect y="4.67" width="20" height="4.67" fill="#FFFFFF" />
+            <rect y="9.34" width="20" height="4.66" fill="#128807" />
+            <circle cx="10" cy="7" r="1.8" fill="none" stroke="#000080" strokeWidth="0.7" />
+            <circle cx="10" cy="7" r="0.4" fill="#000080" />
+        </svg>
+    )
+}
+
+export function USFlag() {
+    return (
+        <svg width="20" height="14" viewBox="0 0 20 14" fill="none" style={{ borderRadius: '2px', overflow: 'hidden', display: 'inline-block', verticalAlign: 'middle', border: '1px solid rgba(0,0,0,0.1)' }}>
+            <rect width="20" height="14" fill="#FFFFFF" />
+            <rect width="20" height="2" fill="#B22234" />
+            <rect y="4" width="20" height="2" fill="#B22234" />
+            <rect y="8" width="20" height="2" fill="#B22234" />
+            <rect y="12" width="20" height="2" fill="#B22234" />
+            <rect width="9" height="8" fill="#3C3B6E" />
+            <circle cx="2.5" cy="2" r="0.6" fill="#FFFFFF" />
+            <circle cx="6.5" cy="2" r="0.6" fill="#FFFFFF" />
+            <circle cx="4.5" cy="4" r="0.6" fill="#FFFFFF" />
+            <circle cx="2.5" cy="6" r="0.6" fill="#FFFFFF" />
+            <circle cx="6.5" cy="6" r="0.6" fill="#FFFFFF" />
+        </svg>
+    )
+}

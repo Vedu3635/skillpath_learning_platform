@@ -5,7 +5,8 @@ import { CourseCard } from "./CourseCard"
 import { CourseGridSkeleton } from "./CourseGridSkeleton"
 import { CourseGridError } from "./CourseGridError"
 import { CourseGridEmpty } from "./CourseGridEmpty"
-import { DISPLAY_FONT, INK, FONT_IMPORT } from "../../constants/theme"
+import { IndiaFlag, USFlag } from "../Common/Icons"
+import { DISPLAY_FONT, INK, MUTED, FONT_IMPORT } from "../../constants/theme"
 
 export function CourseGrid({
     accentColor,
@@ -13,6 +14,8 @@ export function CourseGrid({
 }: CourseGridProps) {
     const [courses, setCourses] = React.useState<Course[]>([])
     const [country, setCountry] = React.useState<"IN" | "US" | null>(null)
+    void country
+    const [selectedCountry, setSelectedCountry] = React.useState<"IN" | "US" | null>(null)
 
     const [loading, setLoading] = React.useState(true)
     const [error, setError] = React.useState(false)
@@ -23,6 +26,7 @@ export function CourseGrid({
         setError(false)
         setCountryFailed(false)
         setCountry(null)
+        setSelectedCountry(null)
         setCourses([])
 
         try {
@@ -38,10 +42,12 @@ export function CourseGrid({
                 if (signal?.aborted) return
 
                 setCountry(countryData.country_code)
+                setSelectedCountry(countryData.country_code)
             } catch (err) {
                 if (signal?.aborted) return
 
                 setCountry("US")
+                setSelectedCountry("US")
                 setCountryFailed(true)
             }
         } catch (err) {
@@ -155,12 +161,134 @@ export function CourseGrid({
 
     return (
         <div className="cg-root" style={{ padding: "22px" }} data-cg-accent={accentColor}>
+            {/* Header & Demo Pricing Country Toggle */}
+            <div
+                style={{
+                    display: "flex",
+                    alignItems: "center",
+                    justifyContent: "space-between",
+                    marginBottom: "24px",
+                    gap: "16px",
+                    flexWrap: "wrap",
+                }}
+            >
+                <div>
+                    <h2
+                        style={{
+                            margin: 0,
+                            fontSize: "24px",
+                            fontWeight: 700,
+                            color: INK,
+                        }}
+                    >
+                        Explore Courses
+                    </h2>
+
+                    <p
+                        style={{
+                            margin: "6px 0 0",
+                            fontSize: "14px",
+                            color: MUTED,
+                        }}
+                    >
+                        Find the right course for your learning journey.
+                    </p>
+                </div>
+
+                <div style={{ display: "flex", alignItems: "center", gap: "8px" }}>
+                    <span style={{ fontSize: "12px", fontWeight: 700, color: MUTED, textTransform: "uppercase", letterSpacing: "0.05em" }}>
+                        Pricing
+                    </span>
+                    <div
+                        style={{
+                            display: "flex",
+                            alignItems: "center",
+                            padding: "4px",
+                            background: "#F3F4F6",
+                            borderRadius: "10px",
+                            gap: "2px",
+                            border: "1px solid #E4E6EC",
+                        }}
+                    >
+                        <button
+                            type="button"
+                            onClick={() => setSelectedCountry("IN")}
+                            aria-label="India pricing (INR)"
+                            title="India pricing (INR)"
+                            className="cg-focusable"
+                            style={{
+                                border: "none",
+                                borderRadius: "7px",
+                                padding: "6px 12px",
+                                background:
+                                    selectedCountry === "IN"
+                                        ? "#FFFFFF"
+                                        : "transparent",
+                                color:
+                                    selectedCountry === "IN"
+                                        ? INK
+                                        : MUTED,
+                                fontSize: "12.5px",
+                                fontWeight:
+                                    selectedCountry === "IN" ? 700 : 500,
+                                display: "inline-flex",
+                                alignItems: "center",
+                                gap: "6px",
+                                cursor: "pointer",
+                                boxShadow:
+                                    selectedCountry === "IN"
+                                        ? "0 1px 3px rgba(0,0,0,0.08)"
+                                        : "none",
+                                transition: "all 0.15s ease",
+                            }}
+                        >
+                            <IndiaFlag /> INR
+                        </button>
+
+                        <button
+                            type="button"
+                            onClick={() => setSelectedCountry("US")}
+                            aria-label="United States pricing (USD)"
+                            title="United States pricing (USD)"
+                            className="cg-focusable"
+                            style={{
+                                border: "none",
+                                borderRadius: "7px",
+                                padding: "6px 12px",
+                                background:
+                                    selectedCountry === "US"
+                                        ? "#FFFFFF"
+                                        : "transparent",
+                                color:
+                                    selectedCountry === "US"
+                                        ? INK
+                                        : MUTED,
+                                fontSize: "12.5px",
+                                fontWeight:
+                                    selectedCountry === "US" ? 700 : 500,
+                                display: "inline-flex",
+                                alignItems: "center",
+                                gap: "6px",
+                                cursor: "pointer",
+                                boxShadow:
+                                    selectedCountry === "US"
+                                        ? "0 1px 3px rgba(0,0,0,0.08)"
+                                        : "none",
+                                transition: "all 0.15s ease",
+                            }}
+                        >
+                            <USFlag /> USD
+                        </button>
+                    </div>
+                </div>
+            </div>
+
             <div className="cg-grid">
                 {courses.map((course, idx) => (
                     <CourseCard
                         key={course.mangoId}
                         course={course}
-                        country={country}
+                        country={selectedCountry ?? "US"}
                         countryFailed={countryFailed}
                         accentColor={accentColor}
                         showCategory={showCategory}

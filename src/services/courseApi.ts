@@ -6,12 +6,43 @@ const COURSE_API =
 const COUNTRY_API =
     "https://syncsphere-hiv6.onrender.com/assignment/country-code"
 
-export async function fetchCourses(signal?: AbortSignal): Promise<Course[]> {
-    const response = await fetch(COURSE_API, { signal })
+export async function fetchWithRetry(
+    url: string,
+    options: RequestInit = {},
+    retries = 2
+): Promise<Response> {
+    let lastError: unknown
 
-    if (!response.ok) {
-        throw new Error(`Course API failed: ${response.status}`)
+    for (let attempt = 0; attempt <= retries; attempt++) {
+        try {
+            const response = await fetch(url, options)
+
+            if (response.ok) {
+                return response
+            }
+
+            lastError = new Error(
+                `Request failed with status ${response.status}`
+            )
+        } catch (error) {
+            lastError = error
+        }
+
+        if (attempt < retries) {
+            const delay = 500 * Math.pow(2, attempt)
+            await new Promise((resolve) => setTimeout(resolve, delay))
+        }
     }
+
+    throw lastError
+}
+
+export async function fetchCourses(signal?: AbortSignal): Promise<Course[]> {
+    const response = await fetchWithRetry(
+        COURSE_API,
+        { signal },
+        2
+    )
 
     const data = await response.json()
 
@@ -23,11 +54,11 @@ export async function fetchCourses(signal?: AbortSignal): Promise<Course[]> {
 }
 
 export async function fetchCountry(signal?: AbortSignal): Promise<CountryResponse> {
-    const response = await fetch(COUNTRY_API, { signal })
-
-    if (!response.ok) {
-        throw new Error(`Country API failed: ${response.status}`)
-    }
+    const response = await fetchWithRetry(
+        COUNTRY_API,
+        { signal },
+        2
+    )
 
     const data = await response.json()
 

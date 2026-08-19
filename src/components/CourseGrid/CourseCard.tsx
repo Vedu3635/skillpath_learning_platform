@@ -159,7 +159,7 @@ export function CourseCard({
                             {formatPrice(course, country)}
                         </div>
 
-                        {countryFailed && (
+                        {countryFailed && country === "US" && (
                             <div
                                 style={{
                                     marginTop: "4px",
